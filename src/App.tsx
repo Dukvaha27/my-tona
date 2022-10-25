@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { FC, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate } from "react-router-dom";
+import Header from "./components/Header";
+import RoutesApp from "./routes";
+import authApi from "./store/authApi";
+import { observer } from "mobx-react-lite";
 
-function App() {
+const App: FC = observer(() => {
+  const navigate = useNavigate();
+
+  const { token } = authApi;
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/register");
+    }
+  }, [token]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {token && <Header />}
+      <RoutesApp />
+    </>
   );
-}
+});
 
 export default App;
